@@ -5,31 +5,28 @@
 				divClass : "divToToggle",
 				showClass : "showEnable",
 				hideClass : "hideDisabled"
-			};
+			},
+				o = $.extend(defaults, options),
+				divClass = o.divClass,
+				showClass = o.showClass,
+				hideClass = o.hideClass,
+				container = $( "." + divClass );
 			
-			var o = $.extend(defaults, options);
+			var check = function(obj) {
+				if ( ( obj.hasClass(showClass) && obj[0].checked && obj.is("input[type=radio]") ) || obj.find("option:selected").hasClass(showClass) || ( obj[0].checked && obj.is("input[type=checkbox]") ) ) {
+					container.showAndEnable();
+				} else if ( ( obj.hasClass(hideClass) && obj[0].checked && obj.is("input[type=radio]") ) || obj.find("option:selected").hasClass(hideClass) || ( !obj[0].checked && obj.is("input[type=checkbox]") ) ) {
+					container.hideAndDisable();
+				}
+			};
 			
 			return this.each(function(){
 				var obj = $(this);
 				
-				var divClass = o.divClass;
-				var showClass = o.showClass;
-				var hideClass = o.hideClass;
-				
-				var container = $( "." + divClass );
-				
-				var check = function() {
-					if ( ( obj.hasClass(showClass) && obj.is("input[type=radio]:checked") ) || obj.find("option:selected").hasClass(showClass) || obj.is("input[type=checkbox]:checked") ) {
-						container.showAndEnable();
-					} else if ( ( obj.hasClass(hideClass) && obj.is("input[type=radio]:checked") ) || obj.find("option:selected").hasClass(hideClass) || obj.is("input[type=checkbox]:not(:checked)") ) {
-						container.hideAndDisable();
-					}
-				};
-				
-				check();
+				check(obj);
 				
 				obj.change(function(){
-					check();
+					check(obj);
 				});
 				
 			});
